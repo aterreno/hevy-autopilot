@@ -1,0 +1,105 @@
+name: Weekly progression
+
+# Runs progression.py in the cloud so it works with the laptop off.
+# Schedule: Sunday 22:00 UTC (= 23:00 BST in summer / 22:00 GMT in winter) — late
+# Sunday, after the week's sessions are logged. GitHub cron is UTC only; change the
+# line below to shift it (e.g. "0 23 * * 0" for ~midnight BST).
+on:
+  schedule:
+    - cron: "0 22 * * 0"
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: "Write changes to Hevy? (off = dry-run preview)"
+        type: boolean
+        default: false
+
+# Scheduled runs always apply. Manual runs default to dry-run unless you tick the box.
+permissions:
+  contents: write   # commit the run log (audit trail + keeps the schedule from going stale)
+  issues: write     # open a notification issue when changes are applied
+
+concurrency:
+  group: weekly-progression
+  cancel-in-progress: false
+
+jobs:
+  progress:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # progression.py reads the key from a .env file (open(".env")), so recreate that one line.
+      - name: Write .env from secret
+        run: echo "HEVY_API_KEY=${{ secrets.HEVY_API_KEY }}" > .env
+
+      - name: Decide mode
+        id: mode
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ] || [ "${{ inputs.apply }}" = "true" ]; then
+            echo "apply=--apply" >> "$GITHUB_OUTPUT"
+            echo "label=apply" >> "$GITHUB_OUTPUT"
+          else
+            echo "apply=" >> "$GITHUB_OUTPUT"
+            echo "label=dry-run" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run progression
+        run: |
+          set -o pipefail
+          python3 progression.py ${{ steps.mode.outputs.apply }} | tee run.txt
+
+      - name: Write run summary
+        if: always()
+        run: |
+          {
+            echo "### Progression ${{ steps.mode.outputs.label }} — $(date -u '+%Y-%m-%d %H:%M UTC')"
+            echo '```'
+            cat run.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # Only ping you when something actually changed in apply mode — no weekly noise.
+      - name: Notify on applied changes
+        if: ${{ steps.mode.outputs.label == 'apply' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if grep -q "Nothing to do." run.txt; then
+            echo "No changes this week — skipping issue."
+            exit 0
+          fi
+          DATE=$(date -u '+%Y-%m-%d')
+          {
+            echo "Auto-progression applied to your Hevy routines on $DATE."
+            echo
+            echo '```'
+            cat run.txt
+            echo '```'
+            echo
+            echo "_Edit any weight in the Hevy app to override — changes here are reversible._"
+          } > body.txt
+          gh issue create --title "Progression applied $DATE" --body-file body.txt
+
+      # Append the run to a committed log: doubles as an audit trail and as repo
+      # activity, so GitHub doesn't disable the schedule after 60 idle days.
+      - name: Commit run log
+        if: always()
+        run: |
+          mkdir -p logs
+          {
+            echo
+            echo "## $(date -u '+%Y-%m-%d %H:%M UTC')  (${{ steps.mode.outputs.label }})"
+            echo '```'
+            cat run.txt
+            echo '```'
+          } >> logs/progression.md
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add logs/progression.md
+          git commit -m "Weekly progression log $(date -u '+%Y-%m-%d')" || { echo "nothing to commit"; exit 0; }
+          git push

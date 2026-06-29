@@ -1,0 +1,14 @@
+# Secrets — never commit
+.env
+*.local
+
+# Personal data pulled from the Hevy API (workout history, routines, body weights)
+data/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Local Claude Code settings
+.claude/
