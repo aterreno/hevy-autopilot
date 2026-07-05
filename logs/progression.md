@@ -29,3 +29,36 @@ EXERCISE                         TARGET  LAST SESSION                 DECISION  
 0 weight change(s) proposed.
 Nothing to do.
 ```
+
+## 2026-07-05 22:25 UTC  (apply)
+```
+
+EXERCISE                         TARGET  LAST SESSION                 DECISION              NEW
+------------------------------------------------------------------------------------------------
+
+== FB A · Legs/Push (v2) ==
+→Hip Thrust (Machine)              40kg  40×12, 40×12, 40×12 (2026-06-29) PROGRESS → 45        45kg
+→Bench Press (Barbell)           37.5kg  37.5×12, 37.5×12, 37.5×12 (2026-06-29) PROGRESS → 40        40kg
+→Lat Pulldown (Cable)              47kg  47×12, 47×12, 47×12 (2026-06-29) PROGRESS → 49.5    49.5kg
+→Seated Leg Curl (Machine)         30kg  30×15, 35×15, 35×15 (2026-06-29) PROGRESS → 32.5    32.5kg
+ Bicep Curl (Dumbbell)             28kg  28×12, 28×10, 28×10 (2026-06-29) hold                 28kg
+
+== FB B · Hinge/Pull (v2) ==
+→Romanian Deadlift (Barbell)     62.5kg  62.5×12, 62.5×12, 62.5×12 (2026-06-30) PROGRESS → 65        65kg
+ Bent Over Row (Barbell)           55kg  55×8, 55×10, 55×12 (2026-06-30) hold                 55kg
+ Shoulder Press (Dumbbell)         32kg  32×12, 32×12, 32×12 (2026-06-30) MAXED (16kg DBs) +reps     32kg
+ Lateral Raise (Dumbbell)          12kg  not an achievable DB load    FIX→achievable       20kg
+→Cable Crunch                      37kg  37×20, 37×20, 37×20 (2026-06-30) PROGRESS → 39.5    39.5kg
+
+== FB C · Legs/Upper (v2) ==
+→Leg Extension (Machine)           40kg  40×15, 40×15, 40×15 (2026-07-01) PROGRESS → 45        45kg
+ Incline Bench Press (Dumbbell)     32kg  32×12, 32×12, 32×12 (2026-07-01) MAXED (16kg DBs) +reps     32kg
+→Landmine Row                    42.5kg  42.5×12, 42.5×12, 42.5×12 (2026-07-01) PROGRESS → 45        45kg
+→Chest Fly (Machine)               15kg  15×15, 15×15, 15×15 (2026-07-01) PROGRESS → 17.5    17.5kg
+ Triceps Pushdown                  27kg  27×12, 27×12, 27×12 (2026-07-01) hold                 27kg
+
+10 weight change(s) proposed.
+[200] updated FB A · Legs/Push (v2)
+[200] updated FB B · Hinge/Pull (v2)
+[200] updated FB C · Legs/Upper (v2)
+```
