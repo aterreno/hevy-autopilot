@@ -20,13 +20,14 @@ BASE = "https://api.hevyapp.com"
 HDRS = {"api-key": KEY, "Content-Type": "application/json"}
 APPLY = "--apply" in sys.argv
 ROUTINE_TAG = "(v2)"   # which routines to manage
+HOLD = {"D04AC939"}    # Squat (Barbell) — weight managed by feel, never auto-changed
 
 # Per-exercise weight increment (kg). Falls back to parsing "+Nkg" from the note, then 2.5.
 INCREMENTS = {
     "C7973E0E": 5,    # Leg Press (retired; kept for old logs)
     "68CE0B9B": 5,    # Hip Thrust (Machine) — replaces leg press on FB A
     "75A4F6C4": 5,    # Leg Extension (retired 2026-07-06, knees; kept for old logs)
-    "D04AC939": 2.5,  # Squat (Barbell) — replaces leg extension on FB C, controlled depth
+    "D04AC939": 2.5,  # Squat (Barbell) — replaces leg extension on FB C (in HOLD: never auto-progressed)
     "79D0BB3A": 2.5,  # Bench Press (Barbell)
     "6A6C31A5": 2.5,  # Lat Pulldown
     "11A123F3": 2.5,  # Seated Leg Curl
@@ -128,6 +129,10 @@ for r in sorted(routines, key=lambda x: x["title"]):
         inc = increment_for(tid, ex.get("notes"))
         title = ex["title"]
         kind = equip(title)
+
+        if tid in HOLD:
+            rows.append(("ROW", title, f"{fmt(target)}kg", "managed by feel", "hold (manual)", f"{fmt(target)}kg"))
+            continue
 
         # Correct any target that isn't an achievable load (e.g. a DB weight your rack can't make).
         if kind == "db" and not is_db_load(target):
