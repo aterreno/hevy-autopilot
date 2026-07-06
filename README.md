@@ -75,7 +75,7 @@ Equipment lives in the config block at the top of `progression.py`.
 
 Each working set carries a `rep_range` and a fixed `weight_kg`, plus a note like:
 
-> Start 80kg. Add +5kg ONLY after you hit 12 reps on all working sets; otherwise keep the same weight. Targets are fixed on purpose — ignore any auto-suggested jump.
+> Start 80kg. Add +5kg ONLY after you hit 12 reps on all working sets; otherwise keep the same weight next time.
 
 Exercise template IDs (e.g. `C7973E0E` = Leg Press) come from `GET /v1/exercise_templates`.
 

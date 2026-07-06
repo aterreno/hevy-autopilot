@@ -25,7 +25,8 @@ ROUTINE_TAG = "(v2)"   # which routines to manage
 INCREMENTS = {
     "C7973E0E": 5,    # Leg Press (retired; kept for old logs)
     "68CE0B9B": 5,    # Hip Thrust (Machine) — replaces leg press on FB A
-    "75A4F6C4": 5,    # Leg Extension (Machine) — replaces leg press on FB C
+    "75A4F6C4": 5,    # Leg Extension (retired 2026-07-06, knees; kept for old logs)
+    "D04AC939": 2.5,  # Squat (Barbell) — replaces leg extension on FB C, controlled depth
     "79D0BB3A": 2.5,  # Bench Press (Barbell)
     "6A6C31A5": 2.5,  # Lat Pulldown
     "11A123F3": 2.5,  # Seated Leg Curl

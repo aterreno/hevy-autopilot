@@ -34,8 +34,7 @@ def warm(n=1):
 
 def prog(w, top, inc):
     return (f"Start {w}kg. Add +{inc}kg ONLY after you hit {top} reps on all working sets; "
-            f"otherwise keep the same weight next time. Targets are fixed on purpose — "
-            f"ignore any auto-suggested jump.")
+            f"otherwise keep the same weight next time.")
 
 LOWIMPACT = "Feet high on platform; stop short of a deep bottom — keep the range controlled. " \
             "If anything pinches, reduce range before adding weight. "

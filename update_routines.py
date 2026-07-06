@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Rebuild the 3 v2 routines to match current live state (idempotent).
 
-Reflects: leg press retired -> Hip Thrust (FB A,
-glute/quad) + Leg Extension (FB C, quad), both low-impact; weights at their current
-progressed values as of 2026-06-23. Re-running this PUTs the routines as written, so
-keep the weights here in sync with progression.py --apply (or it will regress them)."""
+Reflects: leg press retired 2026-06-23 -> Hip Thrust (FB A, glute/quad) + Leg Extension
+(FB C, quad); leg extension retired 2026-07-06 (knee pain, setup faff) -> Squat
+(Barbell) on FB C, controlled depth. Weights at their current progressed values
+as of 2026-07-06. Re-running this PUTs the routines as written, so keep the weights
+here in sync with progression.py --apply (or it will regress them)."""
 import json, urllib.request, urllib.error
 
 KEY = open(".env").read().split("=", 1)[1].strip()
@@ -39,15 +40,15 @@ def warm(n=1):
 
 def prog(w, top, inc):
     return (f"Start {w}kg. Add +{inc}kg ONLY after you hit {top} reps on all working sets; "
-            f"otherwise keep the same weight next time. Targets are fixed on purpose — "
-            f"ignore any auto-suggested jump.")
+            f"otherwise keep the same weight next time.")
 
 ROWNOTE = "5 min / ~1 km, easy–moderate. Your only gym cardio."
 HIP = ("Replaces leg press — LOW-IMPACT. Feet flat, drive through your HEELS. "
        "Ribs down, squeeze glutes hard at top, 1s pause. "
        "Machine preferred; if none, barbell/Smith across a bench. ")
-EXT = ("Replaces leg press — LOW-IMPACT (knee-only isolation). "
-       "Controlled tempo, squeeze 1s at top, no swinging or kicking. Higher reps to spare the knee. ")
+SQUAT = ("Replaces leg extension (knee niggles). Back squat, CONTROLLED DEPTH — stop at or just "
+         "above parallel, no deep bottom, no bounce. Heels planted, knees tracking over toes, "
+         "brace hard. If the knees complain, reduce depth before weight. ")
 
 def ex(tid, rest, notes, sets, warmups=0):
     return {"exercise_template_id": tid, "superset_id": None, "rest_seconds": rest,
@@ -59,9 +60,9 @@ A = {"title": "FB A · Legs/Push (v2)",
           "Low-impact: leg press retired, no calf raises, no deep squats.",
  "exercises": [
    ex("0222DB42",120,ROWNOTE,[row()]),
-   ex("68CE0B9B",120,HIP+prog(60,12,5),[work(60,8,12)]*3,1),
-   ex("79D0BB3A",120,prog(37.5,12,2.5),[work(37.5,8,12)]*3,2),
-   ex("6A6C31A5",90,prog(47.5,12,2.5),[work(47.5,8,12)]*3,1),
+   ex("68CE0B9B",120,HIP+prog(45,12,5),[work(45,8,12)]*3,1),
+   ex("79D0BB3A",120,prog(40,12,2.5),[work(40,8,12)]*3,2),
+   ex("6A6C31A5",90,prog(49.5,12,2.5),[work(49.5,8,12)]*3,1),
    ex("11A123F3",75,prog(32.5,15,2.5),[work(32.5,10,15)]*3),
    ex("37FCC2BB",60,prog(28,15,2),[work(28,10,15)]*3),
    ex("09C9F635",45,"Lying leg raise — bodyweight, slow lower, no swinging. Lower abs.",
@@ -72,24 +73,24 @@ B = {"title": "FB B · Hinge/Pull (v2)",
           "Romanian deadlift is low-impact. Stop each set 1–2 reps before failure.",
  "exercises": [
    ex("0222DB42",120,ROWNOTE,[row()]),
-   ex("2B4B7310",120,"Hips back, soft knees, bar close, flat back. Stop when the low back rounds. "+prog(60,12,2.5),
-      [work(60,8,12)]*3,2),
-   ex("55E6546F",90,prog(52.5,12,2.5),[work(52.5,8,12)]*3,1),
+   ex("2B4B7310",120,"Hips back, soft knees, bar close, flat back. Stop when the low back rounds. "+prog(65,12,2.5),
+      [work(65,8,12)]*3,2),
+   ex("55E6546F",90,prog(55,12,2.5),[work(55,8,12)]*3,1),
    ex("878CD1D0",90,prog(32,12,2),[work(32,8,12)]*3,1),
    ex("422B08F1",45,"Light and clean — lead with the elbows, no swinging. Drop weight if you can't hit 12 strict.",
       [work(20,12,20)]*3),
-   ex("23A48484",45,prog(35,20,2.5),[work(35,12,20)]*3),
+   ex("23A48484",45,prog(39.5,20,2.5),[work(39.5,12,20)]*3),
  ]}
 C = {"title": "FB C · Legs/Upper (v2)",
- "notes": "Full-body C. 5-min row → quad (leg extension) → incline chest → back → chest fly → triceps. "
-          "Second quad day, low-impact (leg press retired). Keep it controlled.",
+ "notes": "Full-body C. 5-min row → quad (barbell squat, controlled depth) → incline chest → back → chest fly → triceps. "
+          "Second quad day (leg press and leg extension retired). Keep it controlled.",
  "exercises": [
    ex("0222DB42",120,ROWNOTE,[row()]),
-   ex("75A4F6C4",90,EXT+prog(35,15,5),[work(35,12,15)]*3,1),
+   ex("D04AC939",120,SQUAT+prog(60,12,2.5),[work(60,8,12)]*3,2),
    ex("07B38369",90,prog(32,12,2),[work(32,8,12)]*3,1),
-   ex("D7D7FCCE",90,prog(50,12,2.5),[work(50,8,12)]*3,1),
-   ex("78683336",60,prog(20,15,2.5),[work(20,12,15)]*3),
-   ex("93A552C6",60,prog(25,15,2.5),[work(25,12,15)]*3),
+   ex("D7D7FCCE",90,prog(45,12,2.5),[work(45,8,12)]*3,1),
+   ex("78683336",60,prog(17.5,15,2.5),[work(17.5,12,15)]*3),
+   ex("93A552C6",60,prog(27,15,2.5),[work(27,12,15)]*3),
  ]}
 
 for key, r in (("A",A),("B",B),("C",C)):
