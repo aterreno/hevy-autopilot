@@ -62,3 +62,33 @@ EXERCISE                         TARGET  LAST SESSION                 DECISION  
 [200] updated FB B · Hinge/Pull (v2)
 [200] updated FB C · Legs/Upper (v2)
 ```
+
+## 2026-07-12 22:56 UTC  (apply)
+```
+
+EXERCISE                         TARGET  LAST SESSION                 DECISION              NEW
+------------------------------------------------------------------------------------------------
+
+== FB A · Legs/Push (v2) ==
+→Hip Thrust (Machine)              45kg  45×12, 45×12, 45×12 (2026-07-06) PROGRESS → 50        50kg
+ Bench Press (Barbell)             40kg  40×12, 40×10, 40×8 (2026-07-12) hold                 40kg
+→Lat Pulldown (Cable)              50kg  50×12, 50×12, 50×12 (2026-07-06) PROGRESS → 52.5    52.5kg
+ Bicep Curl (Dumbbell)             28kg  28×12, 28×12, 28×10 (2026-07-06) hold                 28kg
+
+== FB B · Hinge/Pull (v2) ==
+ Romanian Deadlift (Barbell)       65kg  65×8, 65×8, 65×8 (2026-07-11) hold                 65kg
+ Bent Over Row (Barbell)           55kg  40×12, 40×12, 40×12 (2026-07-12) hold                 55kg
+ Shoulder Press (Dumbbell)         32kg  32×12, 32×12, 32×9 (2026-07-11) hold                 32kg
+ Lateral Raise (Dumbbell)          12kg  not an achievable DB load    FIX→achievable       20kg
+→Cable Crunch                      40kg  40×20, 40×20, 40×20 (2026-07-11) PROGRESS → 42.5    42.5kg
+
+== FB C · Legs/Upper (v2) ==
+ Squat (Barbell)                   60kg  managed by feel              hold (manual)        60kg
+→Chest Fly (Machine)               15kg  15×15, 15×15, 15×15 (2026-07-12) PROGRESS → 17.5    17.5kg
+ Triceps Pushdown                  25kg  25×12, 25×12, 25×12 (2026-07-12) hold                 25kg
+
+5 weight change(s) proposed.
+[200] updated FB A · Legs/Push (v2)
+[200] updated FB B · Hinge/Pull (v2)
+[200] updated FB C · Legs/Upper (v2)
+```
