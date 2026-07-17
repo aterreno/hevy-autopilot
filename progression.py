@@ -35,6 +35,8 @@ INCREMENTS = {
     "75A4F6C4": 5,    # Leg Extension (Machine) — pin stack
     "79D0BB3A": 5,    # Bench Press (Barbell)
     "6A6C31A5": 2,    # Lat Pulldown (Cable)
+    "0393F233": 2,    # Seated Cable Row - V Grip
+    "923874CA": 2.5,  # Landmine 180 — disk on the loaded end
     "2B4B7310": 5,    # Romanian Deadlift (Barbell)
     "55E6546F": 5,    # Bent Over Row (Barbell)
     "B2398CD1": 2.5,  # Decline Crunch (Weighted) — held disk, smallest 2.5

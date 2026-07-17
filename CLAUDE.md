@@ -3,6 +3,9 @@
 Decisions Toni has made about his routines. Follow these when editing scripts or
 routines; don't re-litigate them.
 
+Personal/medical context is deliberately kept OUT of this repo — it lives in
+Claude's private memory. Don't add health details here or to commit messages.
+
 ## Structure
 
 - Three routines titled **Full Body 1/2/3** — no version suffixes ("(v2)" etc.).
@@ -36,6 +39,12 @@ routines; don't re-litigate them.
 - **Cable crunch**: retired 2026-07-17 → **Decline Crunch (Weighted)**
   (`B2398CD1`, the weighted incline abs bench).
 - **Lateral raise** base weight: 4kg × 2 = 8kg pair total.
+- **Seated Cable Row - V Grip** (`0393F233`): Toni likes it — added to Full
+  Body 2 on 2026-07-17 at his logged 40kg.
+- **Landmine 180** (`923874CA`): the core slot on Full Body 3 (Toni used to do
+  it and asked for it back, 2026-07-17).
+- **Glute isolation**: explicitly not a priority (2026-07-17) — don't add hip
+  thrusts or glute accessories unasked.
 - Knees are sensitive: no new loaded knee-flexion/extension exercises without
   asking; low-impact lower body, controlled depth, no calf raises.
 - Don't silently drop an exercise — if a swap removes a movement, say so.

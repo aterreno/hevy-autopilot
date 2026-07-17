@@ -73,6 +73,7 @@ R2 = {"title": "Full Body 2",
       [work(65)]*3,2),                                     # Romanian Deadlift (Barbell)
    ex("55E6546F",90,"+5kg (2.5/side) once all sets hit 12.",[work(55)]*3,1),    # Bent Over Row (Barbell)
    ex("878CD1D0",90,"Next DBs up (+2kg/hand) once all sets hit 12.",[work(32)]*3,1),  # Shoulder Press (DB)
+   ex("0393F233",90,"+2kg once all sets hit 12.",[work(40)]*3),                 # Seated Cable Row - V Grip
    ex("422B08F1",45,"Strict, lead with the elbows. Next DBs up once all sets hit 12.",
       [work(8)]*3),                                        # Lateral Raise (DB) — 4kg per hand
    ex("B2398CD1",45,"Plate on chest. +2.5kg once all sets hit 12.",[work(5)]*3),  # Decline Crunch (Weighted)
@@ -87,6 +88,7 @@ R3 = {"title": "Full Body 3",
    ex("D7D7FCCE",90,"+2.5kg once all sets hit 12.",[work(45)]*3,1),             # Landmine Row
    ex("78683336",60,"+2.5kg once all sets hit 12.",[work(17.5)]*3),             # Chest Fly (Machine)
    ex("93A552C6",60,"+2kg once all sets hit 12.",[work(25)]*3),                 # Triceps Pushdown
+   ex("923874CA",45,"8-12 each side. +2.5kg once all sets hit 12.",[work(5)]*3),  # Landmine 180
  ]}
 
 ROUTINES = (("1", R1), ("2", R2), ("3", R3))
