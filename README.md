@@ -61,7 +61,7 @@ This script won't — it snaps every proposed weight to what your gym can actual
 - **Dumbbells** are logged by Hevy as the *pair total*. The rack is modelled as 4–40 kg
   per hand in 2 kg steps, so a bump is always "the next pair up". At the top it reports
   `MAXED — progress reps/sets`, never an impossible jump. Edit `DUMBBELLS`.
-- **Barbells** snap to 4 kg steps (smallest plate 2 kg, one per side). Edit `PLATE_MIN`.
+- **Barbells** snap to 5 kg steps (smallest disk 2.5 kg, one per side). Edit `PLATE_MIN`.
 - A target that isn't achievable (e.g. a leftover 34 kg DB weight) is flagged
   `FIX→achievable` and corrected down to the nearest real load.
 
@@ -76,7 +76,7 @@ Equipment lives in the config block at the top of `progression.py`.
 
 Each working set carries a `rep_range` (8–12) and a fixed `weight_kg`, plus a short note like:
 
-> +4kg (2kg/side) once all sets hit 12.
+> +5kg (2.5/side) once all sets hit 12.
 
 Exercise template IDs (e.g. `75A4F6C4` = Leg Extension) come from `GET /v1/exercise_templates`.
 

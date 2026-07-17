@@ -27,20 +27,20 @@ IDS = {  # the managed routines (same ids as update_routines.py)
 }
 HOLD = {"D04AC939"}    # Squat (Barbell) — weight managed by feel, never auto-changed
 
-# Per-exercise weight increment (kg). Only 2kg add-on plates exist, so:
-# barbell = 4 (2kg/side), landmine/cable/stack = 2, pin-stack machines = 5.
+# Per-exercise weight increment (kg). Gym inventory (see CLAUDE.md):
+# cables have +2kg add-on weights; disks are 2.5/5/10/20 per side, so barbell = 5
+# (2.5/side) and single-end/held-plate = 2.5; pin-stack machines = 5.
 # Dumbbell lifts ignore this — they snap to the next real pair in DB_TOTAL.
 INCREMENTS = {
     "75A4F6C4": 5,    # Leg Extension (Machine) — pin stack
-    "79D0BB3A": 4,    # Bench Press (Barbell)
+    "79D0BB3A": 5,    # Bench Press (Barbell)
     "6A6C31A5": 2,    # Lat Pulldown (Cable)
-    "11A123F3": 2,    # Seated Leg Curl (Machine)
-    "2B4B7310": 4,    # Romanian Deadlift (Barbell)
-    "55E6546F": 4,    # Bent Over Row (Barbell)
-    "B2398CD1": 2,    # Decline Crunch (Weighted)
-    "D7D7FCCE": 2,    # Landmine Row — one 2kg plate on the loaded end
-    "78683336": 2,    # Chest Fly (Machine)
-    "93A552C6": 2,    # Triceps Pushdown
+    "2B4B7310": 5,    # Romanian Deadlift (Barbell)
+    "55E6546F": 5,    # Bent Over Row (Barbell)
+    "B2398CD1": 2.5,  # Decline Crunch (Weighted) — held disk, smallest 2.5
+    "D7D7FCCE": 2.5,  # Landmine Row — one 2.5kg disk on the loaded end
+    "78683336": 2.5,  # Chest Fly (Machine) — stack has half-steps (15 → 17.5)
+    "93A552C6": 2,    # Triceps Pushdown (Cable)
 }
 
 def call(method, path, body=None):
@@ -65,8 +65,8 @@ def fmt(n):
 # This is where Hevy falls down: it'll happily suggest a weight you can't load.
 EPS = 0.01
 DUMBBELLS = list(range(4, 41, 2))                 # rack runs 4-40kg per hand in 2kg steps
-PLATE_MIN = 2                                     # smallest plate: 2kg
-BARBELL_STEP = 2 * PLATE_MIN                      # smallest symmetric barbell jump = 4kg
+PLATE_MIN = 2.5                                   # smallest disk: 2.5kg
+BARBELL_STEP = 2 * PLATE_MIN                      # smallest symmetric barbell jump = 5kg
 DB_TOTAL = sorted({2 * d for d in DUMBBELLS})     # Hevy logs DB lifts as the pair total
 
 def equip(title):
@@ -91,7 +91,7 @@ def next_load(kind, current, inc):
         return higher[0] if higher else None          # None => dumbbell ceiling reached
     if kind == "bb":
         steps = max(1, round(inc / BARBELL_STEP))
-        return current + steps * BARBELL_STEP          # snapped to 4kg
+        return current + steps * BARBELL_STEP          # snapped to 5kg
     return current + inc                                # stack: trust configured increment
 
 # --- pull recent workouts (enough history to cover every exercise) ---
