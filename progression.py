@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Auto-progress Hevy routine weights from logged performance (double progression).
 
-Reads your recent workouts, and for each working exercise in the (v2) routines:
+Reads your recent workouts, and for each working exercise in the managed routines
+(identified by the fixed IDS below, not by title):
   - if you hit the TOP of the rep range on all working sets (at >= the current target),
     bump the target by that exercise's increment;
   - if you logged a heavier weight than the target without hitting the top, sync the
@@ -19,28 +20,27 @@ KEY = open(".env").read().split("=", 1)[1].strip()
 BASE = "https://api.hevyapp.com"
 HDRS = {"api-key": KEY, "Content-Type": "application/json"}
 APPLY = "--apply" in sys.argv
-ROUTINE_TAG = "(v2)"   # which routines to manage
+IDS = {  # the managed routines (same ids as update_routines.py)
+    "c63a8064-bd5a-439d-b6c6-0808bfbaf8b6",  # Full Body 1
+    "f2dfd68b-377f-430d-a894-c7cdac854614",  # Full Body 2
+    "dc6a26fe-2098-4c1c-bff9-9454d7cd1386",  # Full Body 3
+}
 HOLD = {"D04AC939"}    # Squat (Barbell) — weight managed by feel, never auto-changed
 
-# Per-exercise weight increment (kg). Falls back to parsing "+Nkg" from the note, then 2.5.
+# Per-exercise weight increment (kg). Only 2kg add-on plates exist, so:
+# barbell = 4 (2kg/side), landmine/cable/stack = 2, pin-stack machines = 5.
+# Dumbbell lifts ignore this — they snap to the next real pair in DB_TOTAL.
 INCREMENTS = {
-    "C7973E0E": 5,    # Leg Press (retired; kept for old logs)
-    "68CE0B9B": 5,    # Hip Thrust (Machine) — replaces leg press on FB A
-    "75A4F6C4": 5,    # Leg Extension (retired 2026-07-06, knees; kept for old logs)
-    "D04AC939": 2.5,  # Squat (Barbell) — replaces leg extension on FB C (in HOLD: never auto-progressed)
-    "79D0BB3A": 2.5,  # Bench Press (Barbell)
-    "6A6C31A5": 2.5,  # Lat Pulldown
-    "11A123F3": 2.5,  # Seated Leg Curl
-    "37FCC2BB": 2,    # Bicep Curl (DB)
-    "2B4B7310": 2.5,  # Romanian Deadlift
-    "55E6546F": 2.5,  # Bent Over Row
-    "878CD1D0": 2,    # Shoulder Press (DB)
-    "422B08F1": 2,    # Lateral Raise (DB)
-    "23A48484": 2.5,  # Cable Crunch
-    "07B38369": 2,    # Incline Bench (DB)
-    "D7D7FCCE": 2.5,  # Landmine Row
-    "78683336": 2.5,  # Chest Fly (Machine)
-    "93A552C6": 2.5,  # Triceps Pushdown
+    "75A4F6C4": 5,    # Leg Extension (Machine) — pin stack
+    "79D0BB3A": 4,    # Bench Press (Barbell)
+    "6A6C31A5": 2,    # Lat Pulldown (Cable)
+    "11A123F3": 2,    # Seated Leg Curl (Machine)
+    "2B4B7310": 4,    # Romanian Deadlift (Barbell)
+    "55E6546F": 4,    # Bent Over Row (Barbell)
+    "B2398CD1": 2,    # Decline Crunch (Weighted)
+    "D7D7FCCE": 2,    # Landmine Row — one 2kg plate on the loaded end
+    "78683336": 2,    # Chest Fly (Machine)
+    "93A552C6": 2,    # Triceps Pushdown
 }
 
 def call(method, path, body=None):
@@ -56,7 +56,7 @@ def increment_for(tid, note):
     if tid in INCREMENTS:
         return INCREMENTS[tid]
     m = re.search(r"\+(\d+(?:\.\d+)?)\s*kg", note or "")
-    return float(m.group(1)) if m else 2.5
+    return float(m.group(1)) if m else 2
 
 def fmt(n):
     return str(int(n)) if float(n).is_integer() else str(n)
@@ -64,15 +64,15 @@ def fmt(n):
 # --- equipment model: what loads your gym can actually make ---
 # This is where Hevy falls down: it'll happily suggest a weight you can't load.
 EPS = 0.01
-DUMBBELLS = [10, 12, 14, 16]                     # available dumbbells (kg, per hand)
-PLATE_MIN = 1.25                                 # smallest plate you own
-BARBELL_STEP = 2 * PLATE_MIN                      # smallest symmetric barbell jump = 2.5kg
-DB_TOTAL = sorted({2 * d for d in DUMBBELLS})     # Hevy logs DB lifts as the pair total: [20,24,28,32]
+DUMBBELLS = list(range(4, 41, 2))                 # rack runs 4-40kg per hand in 2kg steps
+PLATE_MIN = 2                                     # smallest plate: 2kg
+BARBELL_STEP = 2 * PLATE_MIN                      # smallest symmetric barbell jump = 4kg
+DB_TOTAL = sorted({2 * d for d in DUMBBELLS})     # Hevy logs DB lifts as the pair total
 
 def equip(title):
     if "(Dumbbell)" in title: return "db"
-    if "(Barbell)" in title or "Landmine" in title: return "bb"
-    return "stack"   # machine / cable — increments depend on the gym's stack
+    if "(Barbell)" in title: return "bb"
+    return "stack"   # machine / cable / landmine — trust the configured increment
 
 def is_db_load(w):
     return any(abs(w - x) < EPS for x in DB_TOTAL)
@@ -91,7 +91,7 @@ def next_load(kind, current, inc):
         return higher[0] if higher else None          # None => dumbbell ceiling reached
     if kind == "bb":
         steps = max(1, round(inc / BARBELL_STEP))
-        return current + steps * BARBELL_STEP          # snapped to 2.5kg
+        return current + steps * BARBELL_STEP          # snapped to 4kg
     return current + inc                                # stack: trust configured increment
 
 # --- pull recent workouts (enough history to cover every exercise) ---
@@ -112,7 +112,7 @@ for page in range(1, 6):
 
 # --- pull the managed routines ---
 st, d = call("GET", "/v1/routines?page=1&pageSize=10")
-routines = [r for r in d["routines"] if ROUTINE_TAG in r["title"]]
+routines = [r for r in d["routines"] if r["id"] in IDS]
 
 changes = []   # (routine, exercise_obj, old, new)
 rows = []
@@ -203,8 +203,6 @@ for r, ex, old, new in changes:
     for s in ex["sets"]:
         if s["type"] == "normal" and s.get("rep_range") and s.get("weight_kg") is not None:
             s["weight_kg"] = new
-    if ex.get("notes"):
-        ex["notes"] = re.sub(r"Start\s+\d+(?:\.\d+)?kg", f"Start {fmt(new)}kg", ex["notes"])
 
 for rid, r in touched.items():
     payload = {"routine": {"title": r["title"], "notes": r.get("notes"), "exercises": [

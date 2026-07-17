@@ -9,10 +9,11 @@ and auto-increment weights unpredictably. These scripts let you define a routine
 with **weights pinned to your actual working loads** and **explicit double-progression rules**
 written into each exercise's notes — and push it straight to your account.
 
-This particular config is a personal **3×/week full-body** plan tuned for:
-- **Fat loss while keeping muscle** (moderate volume, reps in reserve)
-- **Low-impact** lower body — no calf raises, no deep squats, no single-leg work (leg press with a controlled range instead)
+This particular config is a personal **3×/week full-body** plan (Full Body 1/2/3) tuned for:
+- **Fat loss while keeping muscle** (moderate volume, reps in reserve, everything 8–12 reps)
+- **Low-impact** lower body — no calf raises, no deep squats, no single-leg work
 - **Rowing as the only cardio** (5 min / 1 km to open each session)
+- **No repeats** — an exercise appears in at most one of the three routines (rowing excepted)
 
 Treat the weights and exercise picks as an example — edit them to your own numbers.
 
@@ -57,10 +58,10 @@ live in the `INCREMENTS` map at the top of the script.
 **Equipment-aware (where Hevy fails).** Hevy will happily suggest a weight you can't load.
 This script won't — it snaps every proposed weight to what your gym can actually make:
 
-- **Dumbbells** are logged by Hevy as the *pair total*. With 10/12/14/16 kg dumbbells the
-  only achievable loads are 20/24/28/32 kg, and **32 is the ceiling**. At the ceiling it
-  reports `MAXED — progress reps/sets`, never an impossible jump. Edit `DUMBBELLS`.
-- **Barbells** snap to 2.5 kg steps (smallest plate 1.25 kg, one per side). Edit `PLATE_MIN`.
+- **Dumbbells** are logged by Hevy as the *pair total*. The rack is modelled as 4–40 kg
+  per hand in 2 kg steps, so a bump is always "the next pair up". At the top it reports
+  `MAXED — progress reps/sets`, never an impossible jump. Edit `DUMBBELLS`.
+- **Barbells** snap to 4 kg steps (smallest plate 2 kg, one per side). Edit `PLATE_MIN`.
 - A target that isn't achievable (e.g. a leftover 34 kg DB weight) is flagged
   `FIX→achievable` and corrected down to the nearest real load.
 
@@ -73,11 +74,11 @@ Equipment lives in the config block at the top of `progression.py`.
 - `POST /v1/routines` — create routines with pinned weights, rep ranges, rest, and progression notes
 - `PUT /v1/routines/{id}` — overwrite a routine (send the full exercise list; partial updates replace everything)
 
-Each working set carries a `rep_range` and a fixed `weight_kg`, plus a note like:
+Each working set carries a `rep_range` (8–12) and a fixed `weight_kg`, plus a short note like:
 
-> Start 80kg. Add +5kg ONLY after you hit 12 reps on all working sets; otherwise keep the same weight next time.
+> +4kg (2kg/side) once all sets hit 12.
 
-Exercise template IDs (e.g. `C7973E0E` = Leg Press) come from `GET /v1/exercise_templates`.
+Exercise template IDs (e.g. `75A4F6C4` = Leg Extension) come from `GET /v1/exercise_templates`.
 
 ## Notes
 
