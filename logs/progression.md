@@ -92,3 +92,38 @@ EXERCISE                         TARGET  LAST SESSION                 DECISION  
 [200] updated FB B · Hinge/Pull (v2)
 [200] updated FB C · Legs/Upper (v2)
 ```
+
+## 2026-07-19 22:58 UTC  (apply)
+```
+
+EXERCISE                         TARGET  LAST SESSION                 DECISION              NEW
+------------------------------------------------------------------------------------------------
+
+== Full Body 1 ==
+ Leg Extension (Machine)           45kg  40×15, 40×15, 40×15 (2026-07-01) hold                 45kg
+→Bench Press (Barbell)             40kg  40×12, 40×12, 40×12 (2026-07-14) PROGRESS → 45        45kg
+ Lat Pulldown (Cable)              52kg  52×12, 52×12, 52×10 (2026-07-14) hold                 52kg
+ Romanian Deadlift (Dumbbell)      40kg  40×8, 40×8, 40×8 (2026-07-14) hold                 40kg
+ Bicep Curl (Dumbbell)             28kg  28×10, 28×10, 28×10 (2026-07-14) hold                 28kg
+
+== Full Body 2 ==
+→Romanian Deadlift (Barbell)       65kg  65×12, 65×12, 65×12 (2026-07-15) PROGRESS → 70        70kg
+ Bent Over Row (Barbell)           55kg  55×8, 55×10, 55×12 (2026-07-15) hold                 55kg
+→Shoulder Press (Dumbbell)         32kg  32×12, 32×12, 32×12 (2026-07-15) PROGRESS → 36        36kg
+ Seated Cable Row - V Grip (Cable)     40kg  40×12, 40×12 (2026-06-05)    hold                 40kg
+→Lateral Raise (Dumbbell)           8kg  8×20, 8×12, 8×12 (2026-07-15) PROGRESS → 12        12kg
+→Decline Crunch (Weighted)          5kg  5×12, 10×12, 10×12 (2026-06-02) PROGRESS → 7.5      7.5kg
+
+== Full Body 3 ==
+ Squat (Barbell)                   60kg  managed by feel              hold (manual)        60kg
+→Incline Bench Press (Dumbbell)     32kg  32×12, 32×12, 32×12 (2026-07-17) PROGRESS → 36        36kg
+→Landmine Row                      45kg  45×12, 45×12, 45×12 (2026-07-17) PROGRESS → 47.5    47.5kg
+→Chest Fly (Machine)             17.5kg  20×12, 20×12, 20×12 (2026-07-17) PROGRESS → 22.5    22.5kg
+→Triceps Pushdown                  25kg  25×12, 25×12, 25×12 (2026-07-17) PROGRESS → 27        27kg
+ Landmine 180                       5kg  no recent log                hold                  5kg
+
+9 weight change(s) proposed.
+[200] updated Full Body 1
+[200] updated Full Body 2
+[200] updated Full Body 3
+```
