@@ -18,6 +18,15 @@ Claude's private memory. Don't add health details here or to commit messages.
 - Weights in `update_routines.py` are pinned to live values — before rebuilding,
   check the live routines so progressed weights aren't regressed.
 
+## Travel routines (temporary)
+
+- **Travel 1/2** (bodyweight + resistance band, `travel_routines.py`) created
+  2026-07-21 for two weeks away — folder `3272365`, routine IDs
+  `dd2fe666-c34e-4555-b6ba-e40bb98e7bbe` / `aad79051-9ccc-4f8c-8015-b192fbd4ffd5`.
+  Legs are squat + hinge only (no lunges/split squats — asked 2026-07-21).
+  Not touched by `progression.py`. Delete routines + folder when Toni is back
+  (~2026-08-04).
+
 ## Gym equipment (drives all increments)
 
 - **Cables** (lat pulldown, pushdown): +2kg add-on weights → increment 2.
