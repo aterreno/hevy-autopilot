@@ -127,3 +127,36 @@ EXERCISE                         TARGET  LAST SESSION                 DECISION  
 [200] updated Full Body 2
 [200] updated Full Body 3
 ```
+
+## 2026-07-26 23:03 UTC  (apply)
+```
+
+EXERCISE                         TARGET  LAST SESSION                 DECISION              NEW
+------------------------------------------------------------------------------------------------
+
+== Full Body 1 ==
+→Leg Extension (Machine)           60kg  60×12, 60×12, 60×12 (2026-07-26) PROGRESS → 65        65kg
+→Bench Press (Barbell)             40kg  40×12, 40×12, 40×12 (2026-07-26) PROGRESS → 45        45kg
+→Lat Pulldown (Cable)              52kg  52×12, 52×12, 52×12 (2026-07-26) PROGRESS → 54        54kg
+→Romanian Deadlift (Dumbbell)      40kg  40×12, 40×12, 40×12 (2026-07-26) PROGRESS → 44        44kg
+ Bicep Curl (Dumbbell)             28kg  28×10, 28×10, 28×10 (2026-07-26) hold                 28kg
+
+== Full Body 2 ==
+→Bent Over Row (Barbell)           55kg  55×12, 55×12, 55×12 (2026-07-22) PROGRESS → 60        60kg
+ Shoulder Press (Dumbbell)         36kg  36×12, 36×10, 36×12 (2026-07-22) hold                 36kg
+→Seated Cable Row - V Grip (Cable)     40kg  40×12, 40×12, 40×12 (2026-07-22) PROGRESS → 42        42kg
+→Lateral Raise (Dumbbell)          12kg  12×12, 12×12, 12×12 (2026-07-22) PROGRESS → 16        16kg
+→Decline Crunch (Weighted)         10kg  10×12, 10×12, 10×12 (2026-07-22) PROGRESS → 12.5    12.5kg
+
+== Full Body 3 ==
+→Incline Bench Press (Dumbbell)     32kg  32×12, 32×12, 32×12 (2026-07-24) PROGRESS → 36        36kg
+ Landmine Row                    47.5kg  45×12, 45×12, 45×12 (2026-07-17) hold               47.5kg
+→Chest Fly (Machine)               20kg  20×12, 20×12, 20×12 (2026-07-24) PROGRESS → 22.5    22.5kg
+→Triceps Pushdown                  27kg  27×12, 27×12, 27×12 (2026-07-24) PROGRESS → 29        29kg
+ Landmine 180                       5kg  no recent log                hold                  5kg
+
+11 weight change(s) proposed.
+[200] updated Full Body 1
+[200] updated Full Body 2
+[200] updated Full Body 3
+```
