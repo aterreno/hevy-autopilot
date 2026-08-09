@@ -191,3 +191,33 @@ EXERCISE                         TARGET  LAST SESSION                 DECISION  
 0 weight change(s) proposed.
 Nothing to do.
 ```
+
+## 2026-08-09 22:37 UTC  (apply)
+```
+
+EXERCISE                         TARGET  LAST SESSION                 DECISION              NEW
+------------------------------------------------------------------------------------------------
+
+== Full Body 1 ==
+ Leg Extension (Machine)           65kg  60×12, 60×12, 60×12 (2026-08-08) hold                 65kg
+ Bench Press (Barbell)             45kg  40×8, 40×8 (2026-08-08)      hold                 45kg
+ Lat Pulldown (Cable)              54kg  52×12, 52×12, 52×12 (2026-07-26) hold                 54kg
+ Romanian Deadlift (Dumbbell)      44kg  40×12, 40×12, 40×12 (2026-07-26) hold                 44kg
+ Bicep Curl (Dumbbell)             28kg  28×10, 28×10, 28×10 (2026-07-26) hold                 28kg
+
+== Full Body 2 ==
+→Bent Over Row (Barbell)           50kg  50×12, 50×12, 50×12 (2026-08-08) PROGRESS → 55        55kg
+→Seated Cable Row - V Grip (Cable)     40kg  40×12, 40×12, 40×12 (2026-08-08) PROGRESS → 42        42kg
+→Lateral Raise (Dumbbell)          12kg  12×12, 12×12, 12×12 (2026-08-08) PROGRESS → 16        16kg
+→Decline Crunch (Weighted)         10kg  10×12, 10×12, 10×12 (2026-08-08) PROGRESS → 12.5    12.5kg
+
+== Full Body 3 ==
+ Incline Bench Press (Dumbbell)     36kg  32×12, 32×12, 32×12 (2026-07-24) hold                 36kg
+ Landmine Row                    47.5kg  45×12, 45×12, 45×12 (2026-07-17) hold               47.5kg
+ Chest Fly (Machine)             22.5kg  20×12, 20×12, 20×12 (2026-07-24) hold               22.5kg
+ Triceps Pushdown                  29kg  27×12, 27×12, 27×12 (2026-07-24) hold                 29kg
+ Landmine 180                       5kg  no recent log                hold                  5kg
+
+4 weight change(s) proposed.
+[200] updated Full Body 2
+```
