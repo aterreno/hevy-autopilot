@@ -221,3 +221,30 @@ EXERCISE                         TARGET  LAST SESSION                 DECISION  
 4 weight change(s) proposed.
 [200] updated Full Body 2
 ```
+
+## 2026-08-16 22:27 UTC  (apply)
+```
+
+EXERCISE                         TARGET  LAST SESSION                 DECISION              NEW
+------------------------------------------------------------------------------------------------
+
+== Full Body 1 ==
+→Leg Extension (Machine)           65kg  65×12, 65×12, 65×12 (2026-08-11) PROGRESS → 70        70kg
+ Bench Press (Barbell)             40kg  40×8, 40×8 (2026-08-13)      hold                 40kg
+→Lat Pulldown (Cable)              50kg  50×12, 50×12, 50×12 (2026-08-11) PROGRESS → 52        52kg
+ Bicep Curl (Dumbbell)             24kg  20×12, 20×12, 20×12 (2026-08-13) hold                 24kg
+
+== Full Body 2 ==
+→Bent Over Row (Barbell)           40kg  40×12, 40×12 (2026-08-13)    PROGRESS → 45        45kg
+→Lateral Raise (Dumbbell)          12kg  12×12, 12×12, 12×12 (2026-08-13) PROGRESS → 16        16kg
+→Decline Crunch (Weighted)         10kg  10×12, 10×12, 10×12 (2026-08-13) PROGRESS → 12.5    12.5kg
+
+== Full Body 3 ==
+→Incline Bench Press (Dumbbell)     32kg  32×12, 32×12, 32×12 (2026-08-10) PROGRESS → 36        36kg
+→Triceps Pushdown                  25kg  25×12, 25×12, 25×12 (2026-08-10) PROGRESS → 27        27kg
+
+7 weight change(s) proposed.
+[200] updated Full Body 1
+[200] updated Full Body 2
+[200] updated Full Body 3
+```
