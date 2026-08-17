@@ -73,7 +73,11 @@ This script won't — it snaps every proposed weight to what your gym can actual
 - **Dumbbells** are logged by Hevy as the *pair total*. The rack is modelled as 4–40 kg
   per hand in 2 kg steps, so a bump is always "the next pair up". At the top it reports
   `MAXED — progress reps/sets`, never an impossible jump. Edit `DUMBBELLS`.
-- **Barbells** snap to 5 kg steps (smallest disk 2.5 kg, one per side). Edit `PLATE_MIN`.
+- **Kettlebells** snap to the rack (8–24 kg bells): swings to the next single bell,
+  curls to the next pair. Edit `KETTLEBELLS`.
+- **Cable stations** snap to the real stack (25–50 kg pins + a 2 kg add-on), including
+  the 3 kg pin-jump after an add-on (42 → 45) and the 52 kg ceiling. Edit `CABLE_STACK`.
+- **Barbells** snap to 2.5 kg steps (smallest disk 1.25 kg, one per side). Edit `PLATE_MIN`.
 - A target that isn't achievable (e.g. a leftover 34 kg DB weight) is flagged
   `FIX→achievable` and corrected down to the nearest real load.
 

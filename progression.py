@@ -40,24 +40,14 @@ HOLD_TITLES = {"Squat (Barbell)", "Deadlift (Barbell)"}
 # Dumbbell lifts ignore this — they snap to the next real pair in DB_TOTAL.
 INCREMENTS = {
     "75A4F6C4": 5,    # Leg Extension (Machine) — pin stack
-    "79D0BB3A": 5,    # Bench Press (Barbell)
-    "6A6C31A5": 2,    # Lat Pulldown (Cable)
-    "0393F233": 2,    # Seated Cable Row - V Grip
+    "79D0BB3A": 2.5,  # Bench Press (Barbell) — 1.25kg disks exist
     "923874CA": 2.5,  # Landmine 180 — disk on the loaded end
-    "55E6546F": 5,    # Bent Over Row (Barbell)
-    "B2398CD1": 2.5,  # Decline Crunch (Weighted) — held disk, smallest 2.5
+    "55E6546F": 2.5,  # Bent Over Row (Barbell) — 1.25kg disks exist
+    "B2398CD1": 2.5,  # Decline Crunch (Weighted) — held disk
     "78683336": 2.5,  # Chest Fly (Machine) — stack has half-steps (15 → 17.5)
-    "93A552C6": 2,    # Triceps Pushdown (Cable)
 }
-# New exercises are resolved by title (run-time template ids). Kettlebell rack
-# sizes are a guess (pairs jump 4kg/hand) — verify against the gym.
-INCREMENTS_BY_TITLE = {
-    "Bicep Curl (Kettlebell)": 8,  # next pair up = +4kg/hand
-    "Kettlebell Curl": 8,
-    "Kettlebell Swing": 4,         # next single bell up
-    "Face Pull": 2,                # cable add-on weights
-    "Face Pull (Cable)": 2,
-}
+# Cable stations and kettlebells snap to the racks modelled below instead —
+# their INCREMENTS entries would be ignored.
 
 def call(method, path, body=None):
     data = json.dumps(body).encode() if body is not None else None
@@ -71,8 +61,6 @@ def call(method, path, body=None):
 def increment_for(tid, title, note):
     if tid in INCREMENTS:
         return INCREMENTS[tid]
-    if title in INCREMENTS_BY_TITLE:
-        return INCREMENTS_BY_TITLE[title]
     m = re.search(r"\+(\d+(?:\.\d+)?)\s*kg", note or "")
     return float(m.group(1)) if m else 2
 
@@ -81,35 +69,57 @@ def fmt(n):
 
 # --- equipment model: what loads your gym can actually make ---
 # This is where Hevy falls down: it'll happily suggest a weight you can't load.
+# Inventory confirmed by Toni 2026-08-17 (see CLAUDE.md).
 EPS = 0.01
 DUMBBELLS = list(range(4, 41, 2))                 # rack runs 4-40kg per hand in 2kg steps
-PLATE_MIN = 2.5                                   # smallest disk: 2.5kg
-BARBELL_STEP = 2 * PLATE_MIN                      # smallest symmetric barbell jump = 5kg
+PLATE_MIN = 1.25                                  # smallest disk: 1.25kg
+BARBELL_STEP = 2 * PLATE_MIN                      # smallest symmetric barbell jump = 2.5kg
 DB_TOTAL = sorted({2 * d for d in DUMBBELLS})     # Hevy logs DB lifts as the pair total
+KETTLEBELLS = [8, 12, 16, 20, 24]                 # single bells
+CABLE_STACK = [25, 30, 35, 40, 45, 50]            # cable stations: pin values
+CABLE_ADDON = 2                                   # one +2kg add-on weight
+CABLE_LOADS = sorted({s + a for s in CABLE_STACK for a in (0, CABLE_ADDON)})
+CABLE_TITLES = {"Triceps Pushdown", "Face Pull"}  # cable stations w/o "Cable" in the title
+
+# kind -> the discrete loads that kind snaps to (bb/stack progress by increment)
+LOADS = {
+    "db": DB_TOTAL,
+    "cable": CABLE_LOADS,
+    "kb1": KETTLEBELLS,                    # single bell (swings)
+    "kb2": [2 * k for k in KETTLEBELLS],   # pair, logged as the total (curls)
+}
 
 def equip(title):
     if "(Dumbbell)" in title: return "db"
     if "(Barbell)" in title: return "bb"
-    return "stack"   # machine / cable / landmine — trust the configured increment
+    if "Kettlebell" in title:
+        return "kb1" if "Swing" in title else "kb2"
+    if "Cable" in title or title in CABLE_TITLES: return "cable"
+    return "stack"   # other machines / landmine / held plate — trust the configured increment
 
-def is_db_load(w):
-    return any(abs(w - x) < EPS for x in DB_TOTAL)
+def is_load(kind, w):
+    L = LOADS.get(kind)
+    return True if L is None else any(abs(w - x) < EPS for x in L)
 
-def snap_db_down(w):
-    below = [x for x in DB_TOTAL if x <= w + EPS]
-    return below[-1] if below else DB_TOTAL[0]
+def snap_down(kind, w):
+    L = LOADS[kind]
+    below = [x for x in L if x <= w + EPS]
+    return below[-1] if below else L[0]
 
-def db_hint(total):
-    return f"({fmt(total / 2)}kg DBs)"
+def maxed_hint(kind, total):
+    if kind in ("db", "kb2"):
+        return f"({fmt(total / 2)}kg per hand)"
+    return "(top of rack)"
 
 def next_load(kind, current, inc):
     """Next achievable load above `current`, or None if at the equipment ceiling."""
-    if kind == "db":
-        higher = [x for x in DB_TOTAL if x > current + EPS]
-        return higher[0] if higher else None          # None => dumbbell ceiling reached
+    L = LOADS.get(kind)
+    if L is not None:
+        higher = [x for x in L if x > current + EPS]
+        return higher[0] if higher else None          # None => equipment ceiling reached
     if kind == "bb":
         steps = max(1, round(inc / BARBELL_STEP))
-        return current + steps * BARBELL_STEP          # snapped to 5kg
+        return current + steps * BARBELL_STEP          # snapped to 2.5kg
     return current + inc                                # stack: trust configured increment
 
 # --- pull recent workouts (enough history to cover every exercise) ---
@@ -153,9 +163,9 @@ for r in sorted(routines, key=lambda x: x["title"]):
             continue
 
         # Correct any target that isn't an achievable load (e.g. a DB weight your rack can't make).
-        if kind == "db" and not is_db_load(target):
-            fixed = snap_db_down(target)
-            rows.append(("ROW", title, f"{fmt(target)}kg", "not an achievable DB load", "FIX→achievable", f"{fmt(fixed)}kg"))
+        if not is_load(kind, target):
+            fixed = snap_down(kind, target)
+            rows.append(("ROW", title, f"{fmt(target)}kg", "not an achievable load", "FIX→achievable", f"{fmt(fixed)}kg"))
             changes.append((r, ex, target, fixed))
             continue
 
@@ -172,9 +182,9 @@ for r in sorted(routines, key=lambda x: x["title"]):
         hit_top = len(sets) >= n_expected and all(rp >= top for rp in reps) and used >= target - EPS
         if hit_top:
             nxt = next_load(kind, used, inc)
-            if nxt is None:                       # at the dumbbell ceiling — can't add load
+            if nxt is None:                       # at the equipment ceiling — can't add load
                 new = target
-                decision = f"MAXED {db_hint(target)} +reps"
+                decision = f"MAXED {maxed_hint(kind, target)} +reps"
             else:
                 new = nxt
                 decision = f"PROGRESS → {fmt(new)}"

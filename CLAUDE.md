@@ -37,17 +37,21 @@ Claude's private memory. Don't add health details here or to commit messages.
   `aad79051-9ccc-4f8c-8015-b192fbd4ffd5`. `travel_routines.py` was removed
   2026-08-17 (in git history if ever needed). Drop this section once deleted.
 
-## Gym equipment (drives all increments)
+## Gym equipment (drives all increments; confirmed by Toni 2026-08-17)
 
-- **Cables** (lat pulldown, pushdown, face pull): +2kg add-on weights → increment 2.
-- **Disks**: 2.5 / 5 / 10 / 20 kg per side → barbell +5kg (2.5/side),
+- **Cables** (lat pulldown, seated row, pushdown, face pull): pin stack
+  25/30/35/40/45/50 plus one +2kg add-on → achievable loads 25, 27, 30, 32,
+  … 50, 52. Floor 25 (face pull can't start lighter), ceiling 52 (lat
+  pulldown is nearly maxed — progress reps there).
+- **Disks**: 1.25 / 2.5 / 5 / 10 / 20 kg per side → barbell micro-jumps
+  +2.5kg (1.25/side) for bench and row; squat/deadlift by feel anyway;
   landmine and held-plate exercises +2.5kg.
 - **Dumbbells**: pairs grow 2kg per hand (10, 12, 14, 16, 18, …); small DBs
   from 4kg exist for raises. Hevy logs the pair total.
-- **Kettlebells**: exact rack unverified — assumed 4kg jumps per bell
-  (8/12/16/20/24). Curls start with a 12kg pair, swings with a single 16.
-  Confirm sizes with Toni before modelling increments any tighter.
-- **Pin-stack machines** (leg extension): +5kg. Chest fly stack has 2.5 half-steps.
+- **Kettlebells**: 8 / 12 / 16 / 20 / 24. Curls use a pair (logged as the
+  total, like DBs — next pair = +8 total), swings a single bell (+4).
+- **Pin-stack machines** (leg extension): +5kg. Chest fly stack has 2.5
+  half-steps. These are separate from the cable stations above.
 
 ## Exercise history (why things are the way they are)
 
