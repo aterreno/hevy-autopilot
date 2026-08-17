@@ -17,8 +17,8 @@ Claude's private memory. Don't add health details here or to commit messages.
   `update_routines.py` (+ `ids.json` for routines created later), never by title.
 - **No exercise appears in more than one routine** (rowing warm-up excepted).
   `update_routines.py` asserts this.
-- **Every loaded exercise works 8–12 reps.** Timed core (plank) is the only
-  exception.
+- **Every loaded exercise works 8–12 reps.** Timed core (plank, side plank)
+  is the only exception.
 - Notes stay **short**: one cue + the increment. No paragraphs.
 - Weights in `update_routines.py` are pinned to live values — before rebuilding,
   check the live routines so progressed weights aren't regressed.
@@ -67,6 +67,10 @@ barbell bench, kettlebell curls):
   a slot opens.
 - **New 2026-08-17**: Face Pull (rear delts/posture), Hammer Curl (DB),
   Kettlebell Swing, Back Extension (bodyweight, hamstring/glute), Plank.
+- **Extra abs on lower days (asked 2026-08-17)**: Dead Bug (`D8911FC4`) on
+  Lower 1, Side Plank on Lower 2 — Toni wanted more ab/bracing work and the
+  lower sessions had spare time inside his hour. Two core slots per lower
+  day is deliberate; keep upper days at one.
   Back Extension assumes the gym has a hyperextension bench — swap for good
   mornings if not (ask first).
 - **Lateral raise**: auto-progression kept writing 16kg while Toni logged 12kg

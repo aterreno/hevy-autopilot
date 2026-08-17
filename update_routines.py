@@ -53,6 +53,7 @@ NEW = {
     "NEW:KB_SWING":    ["Kettlebell Swing"],
     "NEW:BACK_EXT":    ["Back Extension (Hyperextension)", "Back Extension",
                         "Hyperextension"],
+    "NEW:SIDE_PLANK":  ["Side Plank"],
 }
 
 def call(method, path, body=None):
@@ -107,6 +108,7 @@ L1 = {"title": "Lower 1",
    ex("72CFFAD5", "Romanian Deadlift (Dumbbell)", 90, "Hips back, flat back. Next DBs up (+2kg/hand) once all sets hit 12.", [work(44)]*3),
    ex("75A4F6C4", "Leg Extension (Machine)", 90, "Smooth reps — back off if the knees niggle. +5kg once all sets hit 12.", [work(70)]*3, 1),
    ex("923874CA", "Landmine 180", 45, "8-12 each side. +2.5kg once all sets hit 12.", [work(5)]*3),
+   ex("D8911FC4", "Dead Bug", 45, "8-12 each side, slow, low back pressed down.", [work(None)]*3),
  ]}
 U2 = {"title": "Upper 2",
  "notes": "Back, incline chest, delts, arms, abs. Row 5 min first. 1-2 reps in reserve. Cycle: U1 > L1 > U2 > L2.",
@@ -128,6 +130,7 @@ L2 = {"title": "Lower 2",
    ex("NEW:KB_SWING", "Kettlebell Swing", 60, "Snap the hips, arms just hold on. Next bell up once all sets hit 12.", [work(16)]*3),
    ex("NEW:BACK_EXT", "Back Extension", 60, "Squeeze glutes and hams at the top, don't hyperextend. Hold a 2.5kg plate once all sets hit 12.", [work(None)]*3),
    ex("C6C9B8A0", "Plank", 45, "Glutes tight, no sagging. +15s once 45s is easy.", [hold(45)]*3),
+   ex("NEW:SIDE_PLANK", "Side Plank", 45, "30s each side, hips high and stacked. +15s once 30s is easy.", [hold(30)]*3),
  ]}
 
 ROUTINES = [U1, L1, U2, L2]
