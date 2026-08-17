@@ -1,31 +1,38 @@
 #!/usr/bin/env python3
-"""Auto-progress Hevy routine weights from logged performance (double progression).
+"""Suggest Hevy routine weight bumps from logged performance (double progression).
+
+SUGGESTIONS ONLY by default (2026-08-17): Toni commands weight increments
+himself, so the weekly run just prints what looks ready. Nothing is written
+to Hevy unless --apply is passed explicitly (manual workflow dispatch or CLI).
 
 Reads your recent workouts, and for each working exercise in the managed routines
-(identified by the fixed IDS below, not by title):
+(identified by the fixed ids below + ids.json, not by title):
   - if you hit the TOP of the rep range on all working sets (at >= the current target),
-    bump the target by that exercise's increment;
-  - if you logged a heavier weight than the target without hitting the top, sync the
-    target up to what you actually used;
+    suggest bumping the target by that exercise's increment;
+  - if you logged a heavier weight than the target without hitting the top, suggest
+    syncing the target up to what you actually used;
   - otherwise hold.
 
-Dry-run by default — prints a table of proposed changes. Pass --apply to write them.
-
-    python3 progression.py            # preview only
-    python3 progression.py --apply    # write changes via PUT
+    python3 progression.py            # preview only (the default and the schedule)
+    python3 progression.py --apply    # write the suggestions via PUT
 """
-import json, re, sys, urllib.request, urllib.error
+import json, os, re, sys, urllib.request, urllib.error
 
 KEY = open(".env").read().split("=", 1)[1].strip()
 BASE = "https://api.hevyapp.com"
 HDRS = {"api-key": KEY, "Content-Type": "application/json"}
 APPLY = "--apply" in sys.argv
 IDS = {  # the managed routines (same ids as update_routines.py)
-    "c63a8064-bd5a-439d-b6c6-0808bfbaf8b6",  # Full Body 1
-    "f2dfd68b-377f-430d-a894-c7cdac854614",  # Full Body 2
-    "dc6a26fe-2098-4c1c-bff9-9454d7cd1386",  # Full Body 3
+    "c63a8064-bd5a-439d-b6c6-0808bfbaf8b6",  # Upper 1 (was Full Body 1)
+    "f2dfd68b-377f-430d-a894-c7cdac854614",  # Lower 1 (was Full Body 2)
+    "dc6a26fe-2098-4c1c-bff9-9454d7cd1386",  # Upper 2 (was Full Body 3)
 }
-HOLD = {"D04AC939"}    # Squat (Barbell) — weight managed by feel, never auto-changed
+if os.path.exists("ids.json"):  # routines created later (Lower 2) land here
+    IDS |= set(json.load(open("ids.json")).values())
+
+# Managed by feel — never suggested or auto-changed (matched by exercise title,
+# since template ids for new exercises are resolved at run time).
+HOLD_TITLES = {"Squat (Barbell)", "Deadlift (Barbell)"}
 
 # Per-exercise weight increment (kg). Gym inventory (see CLAUDE.md):
 # cables have +2kg add-on weights; disks are 2.5/5/10/20 per side, so barbell = 5
@@ -37,12 +44,19 @@ INCREMENTS = {
     "6A6C31A5": 2,    # Lat Pulldown (Cable)
     "0393F233": 2,    # Seated Cable Row - V Grip
     "923874CA": 2.5,  # Landmine 180 — disk on the loaded end
-    "2B4B7310": 5,    # Romanian Deadlift (Barbell)
     "55E6546F": 5,    # Bent Over Row (Barbell)
     "B2398CD1": 2.5,  # Decline Crunch (Weighted) — held disk, smallest 2.5
-    "D7D7FCCE": 2.5,  # Landmine Row — one 2.5kg disk on the loaded end
     "78683336": 2.5,  # Chest Fly (Machine) — stack has half-steps (15 → 17.5)
     "93A552C6": 2,    # Triceps Pushdown (Cable)
+}
+# New exercises are resolved by title (run-time template ids). Kettlebell rack
+# sizes are a guess (pairs jump 4kg/hand) — verify against the gym.
+INCREMENTS_BY_TITLE = {
+    "Bicep Curl (Kettlebell)": 8,  # next pair up = +4kg/hand
+    "Kettlebell Curl": 8,
+    "Kettlebell Swing": 4,         # next single bell up
+    "Face Pull": 2,                # cable add-on weights
+    "Face Pull (Cable)": 2,
 }
 
 def call(method, path, body=None):
@@ -54,9 +68,11 @@ def call(method, path, body=None):
     except urllib.error.HTTPError as e:
         return e.code, e.read().decode()
 
-def increment_for(tid, note):
+def increment_for(tid, title, note):
     if tid in INCREMENTS:
         return INCREMENTS[tid]
+    if title in INCREMENTS_BY_TITLE:
+        return INCREMENTS_BY_TITLE[title]
     m = re.search(r"\+(\d+(?:\.\d+)?)\s*kg", note or "")
     return float(m.group(1)) if m else 2
 
@@ -128,11 +144,11 @@ for r in sorted(routines, key=lambda x: x["title"]):
         target = work[0]["weight_kg"]
         top = work[0]["rep_range"]["end"]
         n_expected = len(work)
-        inc = increment_for(tid, ex.get("notes"))
         title = ex["title"]
+        inc = increment_for(tid, title, ex.get("notes"))
         kind = equip(title)
 
-        if tid in HOLD:
+        if title in HOLD_TITLES:
             rows.append(("ROW", title, f"{fmt(target)}kg", "managed by feel", "hold (manual)", f"{fmt(target)}kg"))
             continue
 
@@ -183,13 +199,13 @@ for row in rows:
         flag = "→" if dec.startswith("PROGRESS") or dec.startswith("sync") else " "
         print(f"{flag}{title:29s} {tgt:>8s}  {last:28s} {dec:16s} {new:>8s}")
 
-print(f"\n{len(changes)} weight change(s) proposed.")
+print(f"\n{len(changes)} weight change(s) suggested.")
 if not changes:
     print("Nothing to do.")
     sys.exit(0)
 
 if not APPLY:
-    print("Dry-run. Re-run with --apply to write these to Hevy.")
+    print("Suggestions only — nothing written to Hevy. Re-run with --apply to write them.")
     sys.exit(0)
 
 # --- apply: round-trip each routine, mutating only the weights, then PUT ---

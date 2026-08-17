@@ -14,7 +14,10 @@ on:
         type: boolean
         default: false
 
-# Scheduled runs always apply. Manual runs default to dry-run unless you tick the box.
+# SUGGESTIONS ONLY on the schedule (2026-08-17): Toni commands increments himself.
+# Scheduled runs never write to Hevy — they open an issue with the suggestions.
+# To actually apply: run this workflow manually and tick the box, or bump the
+# weight in the app.
 permissions:
   contents: write   # commit the run log (audit trail + keeps the schedule from going stale)
   issues: write     # open a notification issue when changes are applied
@@ -40,12 +43,12 @@ jobs:
       - name: Decide mode
         id: mode
         run: |
-          if [ "${{ github.event_name }}" = "schedule" ] || [ "${{ inputs.apply }}" = "true" ]; then
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.apply }}" = "true" ]; then
             echo "apply=--apply" >> "$GITHUB_OUTPUT"
             echo "label=apply" >> "$GITHUB_OUTPUT"
           else
             echo "apply=" >> "$GITHUB_OUTPUT"
-            echo "label=dry-run" >> "$GITHUB_OUTPUT"
+            echo "label=suggest" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Run progression
@@ -63,9 +66,8 @@ jobs:
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
 
-      # Only ping you when something actually changed in apply mode — no weekly noise.
-      - name: Notify on applied changes
-        if: ${{ steps.mode.outputs.label == 'apply' }}
+      # Only ping you when there's something to act on — no weekly noise.
+      - name: Notify on suggestions or applied changes
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -74,16 +76,25 @@ jobs:
             exit 0
           fi
           DATE=$(date -u '+%Y-%m-%d')
+          if [ "${{ steps.mode.outputs.label }}" = "apply" ]; then
+            TITLE="Progression applied $DATE"
+            HEAD="Progression applied to your Hevy routines on $DATE (manual apply run)."
+            FOOT="_Edit any weight in the Hevy app to override — changes here are reversible._"
+          else
+            TITLE="Progression suggestions $DATE"
+            HEAD="These lifts look ready for more weight. **Nothing has been changed in Hevy** — you're in command."
+            FOOT="_To apply: bump the weight in the app yourself, or run Actions → Weekly progression → Run workflow with the apply box ticked._"
+          fi
           {
-            echo "Auto-progression applied to your Hevy routines on $DATE."
+            echo "$HEAD"
             echo
             echo '```'
             cat run.txt
             echo '```'
             echo
-            echo "_Edit any weight in the Hevy app to override — changes here are reversible._"
+            echo "$FOOT"
           } > body.txt
-          gh issue create --title "Progression applied $DATE" --body-file body.txt
+          gh issue create --title "$TITLE" --body-file body.txt
 
       # Append the run to a committed log: doubles as an audit trail and as repo
       # activity, so GitHub doesn't disable the schedule after 60 idle days.

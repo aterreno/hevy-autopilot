@@ -1,0 +1,59 @@
+name: Rebuild routines
+
+# Pushes the routine design in update_routines.py to Hevy — run it from the
+# Actions tab after changing the design. Dry-run by default: it resolves
+# exercise templates and prints the plan without writing anything. Tick the
+# box to actually PUT/POST. A newly created routine's id is committed back
+# via ids.json so re-runs update it instead of duplicating it.
+on:
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: "Write the routines to Hevy? (off = dry-run preview)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write   # commit ids.json when a routine is created
+
+concurrency:
+  group: rebuild-routines
+  cancel-in-progress: false
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Write .env from secret
+        run: echo "HEVY_API_KEY=${{ secrets.HEVY_API_KEY }}" > .env
+
+      - name: Run rebuild
+        run: |
+          set -o pipefail
+          python3 update_routines.py ${{ inputs.apply && '--apply' || '' }} | tee run.txt
+
+      - name: Write run summary
+        if: always()
+        run: |
+          {
+            echo "### Rebuild ${{ inputs.apply && 'apply' || 'dry-run' }} — $(date -u '+%Y-%m-%d %H:%M UTC')"
+            echo '```'
+            cat run.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit ids.json if a routine was created
+        if: ${{ inputs.apply }}
+        run: |
+          git add ids.json 2>/dev/null || exit 0
+          git diff --cached --quiet && { echo "no new ids"; exit 0; }
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Record created routine id(s) in ids.json"
+          git push
