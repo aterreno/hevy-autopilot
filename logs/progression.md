@@ -320,3 +320,37 @@ EXERCISE                         TARGET  LAST SESSION                 DECISION  
 [200] updated Full Body 2
 [200] updated Full Body 3
 ```
+
+## 2026-09-06 23:41 UTC  (apply)
+```
+
+EXERCISE                         TARGET  LAST SESSION                 DECISION              NEW
+------------------------------------------------------------------------------------------------
+
+== Full Body 1 ==
+ Leg Extension (Machine)           80kg  80×8, 80×12, 80×12 (2026-08-28) hold                 80kg
+ Bench Press (Barbell)             45kg  40×12, 40×12, 40×12 (2026-08-28) hold                 45kg
+ Lat Pulldown (Cable)              54kg  52×12, 52×12, 52×12 (2026-08-25) hold                 54kg
+ Romanian Deadlift (Dumbbell)      48kg  44×12, 44×12, 44×12 (2026-08-25) hold                 48kg
+ Bicep Curl (Dumbbell)             32kg  28×12, 28×12, 28×12 (2026-08-28) hold                 32kg
+
+== Full Body 2 ==
+→Romanian Deadlift (Barbell)       55kg  55×12, 55×12, 55×12 (2026-09-01) PROGRESS → 60        60kg
+→Shoulder Press (Dumbbell)         36kg  36×12, 36×12, 36×12 (2026-09-01) PROGRESS → 40        40kg
+→Bent Over Row (Barbell)           55kg  55×12, 55×12, 55×12 (2026-09-01) PROGRESS → 60        60kg
+→Seated Cable Row - V Grip (Cable)     55kg  55×12, 55×12, 55×12 (2026-09-01) PROGRESS → 57        57kg
+→Lateral Raise (Dumbbell)          20kg  20×12, 20×12, 20×12 (2026-09-01) PROGRESS → 24        24kg
+→Decline Crunch (Weighted)         10kg  10×12, 10×12, 10×12 (2026-09-01) PROGRESS → 12.5    12.5kg
+
+== Full Body 3 ==
+ Squat (Barbell)                   50kg  managed by feel              hold (manual)        50kg
+ Incline Bench Press (Dumbbell)     40kg  40×12, 40×12, 40×10 (2026-09-03) hold                 40kg
+→Lat Pulldown - Close Grip (Cable)     50kg  50×12, 50×12, 50×12 (2026-09-03) PROGRESS → 52        52kg
+→Face Pull                         20kg  20×12, 20×12, 20×12 (2026-09-03) PROGRESS → 22        22kg
+ Single Arm Lateral Raise (Cable)    7.5kg  7.5×8, 7.5×8, 7.5×6 (2026-09-03) hold                7.5kg
+→Triceps Pushdown                  30kg  30×12, 30×12, 30×12 (2026-09-03) PROGRESS → 32        32kg
+
+9 weight change(s) proposed.
+[200] updated Full Body 2
+[200] updated Full Body 3
+```
